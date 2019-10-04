@@ -8,7 +8,7 @@ router.get('/requests', (req, res) => {
 })
 
 router.post('/requests', (req, res) => {
-    var date = Date();
+    var date = new Date();
     var newRequest = {
         "request_id": Math.floor(Math.random() * 900),
         "request_date": String(date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()),
