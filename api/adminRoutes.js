@@ -5,7 +5,7 @@ var { schedules } = require('./data/schedules');
 
 router
 .get('/requests', (req, res) => {
-    res.status(200).send({
+    return res.status(200).send({
         requests
     })
 })
@@ -59,6 +59,42 @@ router
     return res.status(200).send({
         "message": "Request deleted"
     })
+});
+
+router
+.get('/schedules', (req, res) => {
+    res.status(200).send({
+        schedules
+    })
+})
+.post('/schedules', (req, res) => {
+    var requests = {
+        "request_id": 123,
+        "request_date": "12/09/2019",
+        "request_type": "Document Delivery",
+        "preferred_timeslot": "Afternoon",
+        "location_from": "70 Barker Rd, #05-01, Singapore 309936",
+        "location_to": "25 Geylang East Ave 1, #01-05, Singapore 381125",
+        "request_status": "Completed",
+        "telegram_chat_id": "rogerlee12",
+        "emergency_contact_no": "92130612"
+    };
+    schedules[0].scheduled_requests.push(request);
+
+    return res.status(200).send({
+        "message": "Request scheduled"
+    });
+})
+.delete('/schedules', (req, res) => {
+    schedules.forEach((schedule) => {
+        schedule.scheduled_requests.filter( (request) => {
+            return request.request_id != req.body.request_id
+        });
+    });
+
+    return res.status(200).send({
+        "message": "Request deleted"
+    });
 })
 
 module.exports = router;
