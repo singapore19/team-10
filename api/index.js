@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors")
 const PORT = 8081;
 
+global.requests = require("./data/requests")
+global.schedules = require("./data/schedules")
+
 app.use(cors());
 app.use(bodyParser.json());
 
