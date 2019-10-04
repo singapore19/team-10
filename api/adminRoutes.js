@@ -10,7 +10,7 @@ router
 .post('/requests', (req, res) => {
     var date = new Date();
     var request = {
-        "request_id": req.body.request_id,
+        "request_id": Math.floor(Math.random() * 900),
         "request_date": String(date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()),
         "request_type": req.body.request_type,
         "preferred_timeslot": req.body.preferred_timeslot,
@@ -67,7 +67,7 @@ router
 })
 .post('/schedules', (req, res) => {
     var request = {
-        "request_id": 123,
+        "request_id": 124,
         "request_date": "12/09/2019",
         "request_type": "Document Delivery",
         "preferred_timeslot": "Afternoon",
@@ -84,10 +84,11 @@ router
     });
 })
 .delete('/schedules', (req, res) => {
-    global.schedules.forEach((schedule) => {
+    global.schedules = global.schedules.map((schedule) => {
         schedule = schedule.scheduled_requests.filter( (request) => {
             return request.request_id != req.body.request_id
         });
+        return schedule
     });
 
     return res.status(200).send({
