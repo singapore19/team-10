@@ -1,12 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var { requests } = require('./data/requests');
-var { schedules } = require('./data/schedules');
 
 router
 .get('/requests', (req, res) => {
     return res.status(200).send({
-        requests
+        requests: global.requests
     })
 })
 .post('/requests', (req, res) => {
@@ -22,14 +20,14 @@ router
         "telegram_chat_id": req.body.telegram_chat_id,
         "emergency_contact_no": "92130612"
     };
-    requests.push(request);
+    global.requests.push(request);
 
     return res.status(200).send({
         "message": "Request created"
     });
 })
 .put('/requests', (req, res) => {
-    requests = requests.map((request) => {
+    global.requests = global.requests.map((request) => {
         if(request.request_id == req.body.request_id) {
             return {
                 "request_id": request.request_id,
@@ -52,7 +50,7 @@ router
     })
 })
 .delete('/requests', (req, res) => {
-    requests = requests.filter((request) => {
+    global.requests = global.requests.filter((request) => {
         return request.request_id != req.body.request_id
     });
 
@@ -64,11 +62,11 @@ router
 router
 .get('/schedules', (req, res) => {
     res.status(200).send({
-        schedules
+        schedules: global.schedules
     })
 })
 .post('/schedules', (req, res) => {
-    var requests = {
+    var request = {
         "request_id": 123,
         "request_date": "12/09/2019",
         "request_type": "Document Delivery",
@@ -79,14 +77,14 @@ router
         "telegram_chat_id": "rogerlee12",
         "emergency_contact_no": "92130612"
     };
-    schedules[0].scheduled_requests.push(request);
+    global.schedules[0].scheduled_requests.push(request);
 
     return res.status(200).send({
         "message": "Request scheduled"
     });
 })
 .delete('/schedules', (req, res) => {
-    schedules.forEach((schedule) => {
+    global.schedules.forEach((schedule) => {
         schedule.scheduled_requests.filter( (request) => {
             return request.request_id != req.body.request_id
         });
