@@ -9,11 +9,24 @@ router.get('/requests', (req, res) => {
 
 router.post('/requests', (req, res) => {
     var date = new Date();
+    var request_timing = "06:00 PM";
+    switch(req.body.preferred_timeslot){
+        case("Noon"):
+            request_timing = "12:00 PM"
+            break
+        case("Morning"):
+            request_timing = "09:00 AM"
+            break
+        case("Afternoon"):
+            request_timing = "04:00 PM"
+            break
+    }
     var newRequest = {
         "request_id": Math.floor(Math.random() * 900),
-        "request_date": String(date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()),
+        "request_date": req.body.request_date,
         "request_type": req.body.request_type,
         "preferred_timeslot": req.body.preferred_timeslot,
+        request_timing,
         "location_from": req.body.location_from,
         "location_to": req.body.location_to,
         "request_status": req.body.request_status,

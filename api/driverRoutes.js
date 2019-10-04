@@ -15,6 +15,7 @@ router.put('/completed', (req, res) => {
                 "request_id": request.request_id,
                 "request_date": request.request_date,
                 "request_type": request.request_type,
+                "request_timing": request.request_timing,
                 "preferred_timeslot": request.preferred_timeslot,
                 "location_from": request.location_from,
                 "location_to": request.location_to,
