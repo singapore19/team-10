@@ -9,11 +9,24 @@ router
 })
 .post('/requests', (req, res) => {
     var date = new Date();
+    var request_timing = "06:00 PM";
+    switch(req.body.preferred_timeslot){
+        case("Noon"):
+            request_timing = "12:00 PM"
+            break
+        case("Morning"):
+            request_timing = "09:00 AM"
+            break
+        case("Afternoon"):
+            request_timing = "04:00 PM"
+            break
+    }
     var request = {
-        "request_id": req.body.request_id,
-        "request_date": String(date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()),
+        "request_id": Math.floor(Math.random() * 900),
+        "request_date": req.body.request_date,
         "request_type": req.body.request_type,
         "preferred_timeslot": req.body.preferred_timeslot,
+        request_timing,
         "location_from": req.body.location_from,
         "location_to": req.body.location_to,
         "request_status": req.body.request_status,
@@ -29,15 +42,30 @@ router
 .put('/requests', (req, res) => {
     global.requests = global.requests.map((request) => {
         if(request.request_id == req.body.request_id) {
+            var request_timing = "06:00 PM";
+            if(req.body.preferred_timeslot != null && req.body.preferred_timeslot != undefined) {
+                switch(req.body.preferred_timeslot){
+                    case("Noon"):
+                        request_timing = "12:00 PM"
+                        break
+                    case("Morning"):
+                        request_timing = "09:00 AM"
+                        break
+                    case("Afternoon"):
+                        request_timing = "04:00 PM"
+                        break
+                }
+            }
             return {
                 "request_id": request.request_id,
-                "request_date": request.request_date,
+                "request_date": (req.body.request_date != null && req.body.request_date != undefined) ? req.body.request_date : request.request_date,
                 "request_type": (req.body.request_type != null && req.body.request_type != undefined) ? req.body.request_type : request.request_type,
                 "preferred_timeslot": (req.body.preferred_timeslot != null && req.body.preferred_timeslot != undefined) ? req.body.preferred_timeslot : request.preferred_timeslot,
                 "location_from": (req.body.location_from != null && req.body.location_from != undefined) ? req.body.location_from : request.location_from,
                 "location_to": (req.body.location_to != null && req.body.location_to != undefined) ? req.body.location_to : request.location_to,
                 "request_status": (req.body.request_status != null && req.body.request_status != undefined) ? req.body.request_status : request.request_status,
                 "telegram_chat_id": request.telegram_chat_id,
+                "request_timing": (req.body.preferred_timeslot != null && req.body.preferred_timeslot != undefined) ? request_timing : request.request_timing,
                 "emergency_contact_no": "92130612"
             }
         } else {
@@ -67,10 +95,11 @@ router
 })
 .post('/schedules', (req, res) => {
     var request = {
-        "request_id": 123,
+        "request_id": 124,
         "request_date": "12/09/2019",
         "request_type": "Document Delivery",
         "preferred_timeslot": "Afternoon",
+        "request_timing": "04:00 PM",
         "location_from": "70 Barker Rd, #05-01, Singapore 309936",
         "location_to": "25 Geylang East Ave 1, #01-05, Singapore 381125",
         "request_status": "Completed",
@@ -84,10 +113,11 @@ router
     });
 })
 .delete('/schedules', (req, res) => {
-    global.schedules.forEach((schedule) => {
+    global.schedules = global.schedules.map((schedule) => {
         schedule = schedule.scheduled_requests.filter( (request) => {
             return request.request_id != req.body.request_id
         });
+        return schedule
     });
 
     return res.status(200).send({
