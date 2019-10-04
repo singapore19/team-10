@@ -85,7 +85,7 @@ router
 })
 .delete('/schedules', (req, res) => {
     global.schedules.forEach((schedule) => {
-        schedule.scheduled_requests.filter( (request) => {
+        schedule = schedule.scheduled_requests.filter( (request) => {
             return request.request_id != req.body.request_id
         });
     });
